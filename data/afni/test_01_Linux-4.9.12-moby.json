@@ -1,0 +1,12 @@
+{
+    "inputs": {
+        "environ": {},
+        "ignore_exception": false,
+        "in_file": "/data/ds003/sub-01/anat/sub-01_T1w.nii.gz",
+        "out_file": "/data/afni/test_01_Linux-4.9.12-moby.nii.gz",
+        "outputtype": "NIFTI_GZ",
+        "terminal_output": "stream"
+    },
+    "os": "Linux-4.9.12-moby",
+    "python": "3.5.1"
+}
