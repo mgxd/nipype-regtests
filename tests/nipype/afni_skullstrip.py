@@ -5,10 +5,9 @@ import argparse
 
 from bids.grabbids import BIDSLayout
 from nipype import Node
-from nipype.interfaces import afni
+from nipype.interfaces.afni import Skullstrip()
 
-# does this even work?
-from utils import base_version, env_to_json
+from .utils import base_version, env_to_json
 
 # setup environment tracker
 ENV = base_version()
@@ -35,12 +34,13 @@ def create_workflow():
     outfile = os.path.join(OUTDIR, 'test_{}_{}'.format(subj, ENV['os']))
 
     # run afni skullstrip
-    skullstrip = afni.SkullStrip()
+    skullstrip = SkullStrip()
     skullstrip.inputs.in_file = t1
     skullstrip.inputs.outputtype = 'NIFTI_GZ'
     # FIX: this has to be unique for each environment
     skullstrip.inputs.out_file = outfile + '.nii.gz'
     res = skullstrip.run()
+
     # write out json to keep track of information
     ENV.update({'inputs': res.inputs})
     #ENV.update({'outputs': res.outputs})
