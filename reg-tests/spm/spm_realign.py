@@ -11,15 +11,15 @@ from .utils import base_version, env_to_json
 # setup environment tracker
 ENV = base_version()
 # make this more dynamic
-OUTDIR = '/data/spm'
+OUTDIR = '/outputs/spm'
 
 def create_workflow():
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', dest='data',
-                        help="path to bids dataset")
+                        help="Path to bids dataset")
     args = parser.parse_args()
     if not os.path.exists(args.data):
-        raise IOError('data not found')
+        raise IOError('Input data not found')
     if not os.path.exists(OUTDIR):
         os.makedirs(OUTDIR)
 
@@ -29,7 +29,7 @@ def create_workflow():
     func = [f.filename for f in layout.get(subject=subj, type='bold',
                                            extensions=['nii.gz'])][0]
 
-    outfile = os.path.join(OUTDIR, 'test_{}_{}'.format(subj, ENV['os']))
+    outfile = os.path.join(OUTDIR, 'test_{}_{}_motcor'.format(subj, ENV['os']))
 
     # run interface
     realign = Realign()

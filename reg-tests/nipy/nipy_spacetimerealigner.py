@@ -11,15 +11,15 @@ from .utils import base_version, env_to_json
 # setup environment tracker
 ENV = base_version()
 # make this more dynamic
-OUTDIR = '/data/nipy'
+OUTDIR = '/outputs/nipy'
 
 def create_workflow():
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', dest='data',
-                        help="path to bids dataset")
+                        help="Path to bids dataset")
     args = parser.parse_args()
     if not os.path.exists(args.data):
-        raise IOError('data not found')
+        raise IOError('Input data not found')
     if not os.path.exists(OUTDIR):
         os.makedirs(OUTDIR)
 
@@ -29,7 +29,7 @@ def create_workflow():
     func = [f.filename for f in layout.get(subject=subj, type='bold',
                                            extensions=['nii.gz'])][0]
 
-    outfile = os.path.join(OUTDIR, 'test_{}_{}'.format(subj, ENV['os']))
+    outfile = os.path.join(OUTDIR, 'test_{}_{}_motcor'.format(subj, ENV['os']))
 
     # run interface
     # Just SpatialRealign for the moment - TODO add time element with tr/slices
@@ -37,7 +37,7 @@ def create_workflow():
     realign.inputs.in_file = [func]
     # no out_file input, will need to be renamed after
     res = realign.run()
-    
+
     # write out json to keep track of information
     ENV.update({'inputs': res.inputs})
     ENV.update({'nipype_version': nipype.__version__})

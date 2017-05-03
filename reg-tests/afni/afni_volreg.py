@@ -5,7 +5,7 @@ import argparse
 
 from bids.grabbids import BIDSLayout
 from nipype import Node
-from nipype.interfaces.afni import Skullstrip
+from nipype.interfaces.afni import Volreg
 
 from .utils import base_version, env_to_json
 
@@ -28,14 +28,14 @@ def create_workflow():
     # grab data from bids structure
     layout = BIDSLayout(args.data)
     subj = layout.get_subjects()[0]
-    t1 = [f.filename for f in layout.get(subject=subj, type='T1w',
-                                         extensions=['nii.gz'])][0]
+    func = [f.filename for f in layout.get(subject=subj, type='bold',
+                                           extensions=['nii.gz'])][0]
 
-    outfile = os.path.join(OUTDIR, 'test_{}_{}_brain'.format(subj, ENV['os']))
+    outfile = os.path.join(OUTDIR, 'test_{}_{}_motcor'.format(subj, ENV['os']))
 
-    # run afni skullstrip
-    skullstrip = SkullStrip()
-    skullstrip.inputs.in_file = t1
+    # run interface
+    realign = Volreg()
+    skullstrip.inputs.in_file = func
     skullstrip.inputs.outputtype = 'NIFTI_GZ'
     # FIX: this has to be unique for each environment
     skullstrip.inputs.out_file = outfile + '.nii.gz'
