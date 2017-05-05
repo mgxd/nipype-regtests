@@ -36,7 +36,7 @@ def create_workflow():
     realign.inputs.in_files = func
     # FIX: this has to be unique for each environment
     realign.inputs.out_prefix = outfile
-    res = mcflirt.run()
+    res = realign.run()
 
     # write out json to keep track of information
     ENV.update({'inputs': res.inputs})
